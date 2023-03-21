@@ -1,4 +1,5 @@
 # Discord Features Founder
+- Este código pode acarretar problemas por API abuse, use por sua conta e risco
 - Este código foi feito para encontrar servidores que possuem experimentos do discord ativos
 - O código foi feito em javascript usando o discord.js v12 (o código será atualizado no futuro)
 # Como usar:
