@@ -1,0 +1,14 @@
+{
+    "guild": {
+        "name": "Clyde IA",
+        "icon": "https://imgur.com/Cjyo6l5.png",
+        "owner": "717766639260532826",
+        "experiment": "2023-03_clyde_ai",
+        "experimentPos": 100,
+        "seconds": 30
+    },
+    "bot": {
+        "exitGuilds": false,
+        "token": "TOKEN"
+    }
+}
