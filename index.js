@@ -1,7 +1,11 @@
 const config = require('./config.json')
 const Discord = require('discord.js')
 const fs = require('fs/promises')
-const client = new Discord.Client()
+const client = new Discord.Client({
+    ws: {
+        intents: ['GUILDS', 'GUILD_MEMBERS']
+    }
+})
 
 function calcMurmurhash3(t) {
     for (var e, a = 0, c = 3432918353, h = 461845907, r = 0; r < t.length - t.length % 4; r += 4) e = 5 * (65535 & (e = (e ^= a = (65535 & (a = (a = (65535 & (a = 255 & t.charCodeAt(r) | (255 & t.charCodeAt(r + 1)) << 8 | (255 & t.charCodeAt(r + 2)) << 16 | (255 & t.charCodeAt(r + 3)) << 24)) * c + (((a >>> 16) * c & 65535) << 16)) << 15 | a >>> 17)) * h + (((a >>> 16) * h & 65535) << 16)) << 13 | e >>> 19)) + ((5 * (e >>> 16) & 65535) << 16) + 3864292196;
