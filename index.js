@@ -43,14 +43,12 @@ client.on('ready', async () => {
             })
         }
     }
-    let alderayFound = false
     console.log('Ready!')
     try {
         await client.guilds.create(config.guild.name, {
             icon: config.guild.icon,
         }).then(async (g) => {
             if (calcMurmurhash3(config.guild.experiment + ":" + g.id) < config.guild.experimentPos) {
-                alderayFound = true
                 console.log('Experiment Found!')
                 console.log(g)
                 g.channels.cache.first().createInvite({
@@ -76,7 +74,6 @@ client.on('ready', async () => {
                 icon: config.guild.icon,
             }).then(async (g) => {
                 if (calcMurmurhash3(config.guild.experiment + ":" + g.id) < config.guild.experimentPos) {
-                    alderayFound = true
                     console.log('Experiment Found!')
                     console.log(g)
                     g.channels.cache.first().createInvite({
