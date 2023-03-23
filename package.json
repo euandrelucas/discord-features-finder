@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "AGPLv3",
   "scripts": {
-    "start": "npm i && node ."
+    "start": "node ."
   },
   "dependencies": {
     "discord.js": "12"
