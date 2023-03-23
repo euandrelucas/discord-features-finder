@@ -27,21 +27,24 @@ client.on('guildMemberAdd', async (member) => {
 })
 
 client.on('ready', async () => {
-    if (client.guilds.cache.size >= 10) {
-        console.log('[INFO] The bot is on too many servers, it has to be on less than 10 to be able to create servers!')
-        if (config.bot.exitGuilds) {
-            const leaveAmount = client.guilds.cache.size - 8
-            console.log(`[INFO] Leaving ${leaveAmount} guilds...`)
-            client.guilds.cache.forEach(async (guild) => {
-                console.log(`[INFO] Leaving guild "${guild.name}"`)
-                await guild.leave()
-            })
-        }
-    }
-
     async function findExperiment(interval) {
         try {
             console.log('[INFO] Trying to find Experiment...')
+
+            if (client.guilds.cache.size >= 10) {
+                console.log('[INFO] The bot is on too many servers, it has to be on less than 10 to be able to create servers!')
+                if (config.bot.exitGuilds) {
+                    const leaveAmount = client.guilds.cache.size - 8
+                    console.log(`[INFO] Leaving ${leaveAmount} guilds...`)
+                    client.guilds.cache.forEach(async (guild) => {
+                        console.log(`[INFO] Leaving guild "${guild.name}"`)
+                        await guild.leave()
+                    })
+                } else {
+                    process.exit()
+                }
+            }
+
             await client.guilds.create(config.guild.name, {
                 icon: config.guild.icon,
             }).then(async (guild) => {
@@ -60,7 +63,7 @@ client.on('ready', async () => {
                 } else {
                     console.log('[ERROR] Experiment not found, deleting guild...')
                     await guild.delete()
-                    console.log(`[INFO ]Trying again in ${config.guild.seconds} seconds...`)
+                    console.log(`[INFO] Trying again in ${config.guild.seconds} seconds...`)
                 }
             })
         } catch (err) {
