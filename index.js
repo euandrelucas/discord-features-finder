@@ -56,7 +56,7 @@ client.on('ready', async () => {
                     }).then(async (invite) => {
                         await fs.writeFile('invite.txt', invite.url)
                         console.log('[INFO] Invite URL Saved!');
-                        if(interval != null) {
+                        if (interval != null) {
                             clearInterval(interval)
                         }
                     })
@@ -76,7 +76,7 @@ client.on('ready', async () => {
 
     const interval = setInterval(async () => {
         await findExperiment(interval)
-    },  config.guild.seconds * 1000)
+    }, config.guild.seconds * 1000)
 })
 
 client.login(config.bot.token)
