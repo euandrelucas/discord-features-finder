@@ -1,10 +1,10 @@
 {
-  "name": "discord-features-founder",
+  "name": "discord-features-finder",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT",
+  "license": "AGPLv3",
   "scripts": {
-    "start": "node ."
+    "start": "npm i && node ."
   },
   "dependencies": {
     "discord.js": "12"
