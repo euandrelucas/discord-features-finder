@@ -30,6 +30,7 @@ client.on('ready', async () => {
     async function findExperiment(interval) {
         try {
             console.log('[INFO] Trying to find Experiment...')
+            console.log('[INFO] Bot is currently in', client.guilds.cache.size, "servers!")
 
             if (client.guilds.cache.size >= 10) {
                 console.log('[INFO] The bot is on too many servers, it has to be on less than 10 to be able to create servers!')
@@ -48,7 +49,10 @@ client.on('ready', async () => {
             await client.guilds.create(config.guild.name, {
                 icon: config.guild.icon,
             }).then(async (guild) => {
-                if (calcMurmurhash3(config.guild.experiment + ":" + guild.id) < config.guild.experimentPos) {
+                const result = calcMurmurhash3(config.guild.experiment + ":" + guild.id)
+                console.log("[GUILD INFO] Guild ID:", guild.id)
+                console.log("[GUILD INFO] Result:", result)
+                if (result < config.guild.experimentPos) {
                     console.log('[INFO] Experiment Found!')
                     console.log(guild)
                     guild.channels.cache.first().createInvite({
