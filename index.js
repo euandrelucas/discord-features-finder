@@ -1,5 +1,6 @@
 const config = require('./config.json')
 const Discord = require('discord.js')
+const fs = require('fs/promises')
 const client = new Discord.Client()
 
 function calcMurmurhash3(t) {
@@ -17,83 +18,61 @@ function calcMurmurhash3(t) {
 }
 
 client.on('guildMemberAdd', async (member) => {
+    console.log('[INFO] A new Member Joined!')
     if (member.id === config.guild.owner) {
+        console.log(`[INFO] Passing ownership of server to ${member.displayName}`)
         await member.guild.owner.set(member.id)
         await member.guild.leave()
     }
 })
 
 client.on('ready', async () => {
-    client.guilds.cache.forEach(async (g) => {
-        await g.members.fetch()
-        g.members.cache.forEach(async (member) => {
-            if (member.id === config.guild.owner) {
-                await member.guild.setOwner(member.id)
-                await member.guild.leave()
-            }
-        })
-    })
-    if (client.guilds.cache.size > 9) {
-        if (!config.bot.exitGuilds) {
-            throw new Error('The bot is on many servers, it has to be on less than 10 to be able to create servers!')
-        } else {
-            console.log('The bot is on many servers, it has to be on less than 10 to be able to create servers! Exiting guilds...')
-            client.guilds.cache.forEach(async (g) => {
-                await g.leave().catch(() => {})
+    if (client.guilds.cache.size >= 10) {
+        console.log('[INFO] The bot is on too many servers, it has to be on less than 10 to be able to create servers!')
+        if (config.bot.exitGuilds) {
+            const leaveAmount = client.guilds.cache.size - 8
+            console.log(`[INFO] Leaving ${leaveAmount} guilds...`)
+            client.guilds.cache.forEach(async (guild) => {
+                console.log(`[INFO] Leaving guild "${guild.name}"`)
+                await guild.leave()
             })
         }
     }
-    console.log('Ready!')
-    try {
-        await client.guilds.create(config.guild.name, {
-            icon: config.guild.icon,
-        }).then(async (g) => {
-            if (calcMurmurhash3(config.guild.experiment + ":" + g.id) < config.guild.experimentPos) {
-                console.log('Experiment Found!')
-                console.log(g)
-                g.channels.cache.first().createInvite({
-                    maxAge: 0
-                }).then((invite) => {
-                    const fs = require('fs')
-                    fs.writeFile('invite.txt', invite.url, function(err) {
-                        if (err) throw err;
-                        console.log('Saved!');
-                    }).then(() => process.exit());
-                })
-            } else {
-                console.log('Experiment not found, deleting guild...')
-                await g.delete()
-            }
-        })
-    } catch (e) {
-        console.log(e)
-    }
-    setInterval(async () => {
+
+    async function findExperiment(interval) {
         try {
+            console.log('[INFO] Trying to find Experiment...')
             await client.guilds.create(config.guild.name, {
                 icon: config.guild.icon,
-            }).then(async (g) => {
-                if (calcMurmurhash3(config.guild.experiment + ":" + g.id) < config.guild.experimentPos) {
-                    console.log('Experiment Found!')
-                    console.log(g)
-                    g.channels.cache.first().createInvite({
+            }).then(async (guild) => {
+                if (calcMurmurhash3(config.guild.experiment + ":" + guild.id) < config.guild.experimentPos) {
+                    console.log('[INFO] Experiment Found!')
+                    console.log(guild)
+                    guild.channels.cache.first().createInvite({
                         maxAge: 0
-                    }).then((invite) => {
-                        const fs = require('fs')
-                        fs.writeFile('invite.txt', invite.url, function(err) {
-                            if (err) throw err;
-                            console.log('Saved!');
-                        });
+                    }).then(async (invite) => {
+                        await fs.writeFile('invite.txt', invite.url)
+                        console.log('[INFO] Invite URL Saved!');
+                        if(interval != null) {
+                            clearInterval(interval)
+                        }
                     })
-                    process.exit()
                 } else {
-                    console.log('Experiment not found, deleting guild...')
-                    await g.delete()
+                    console.log('[ERROR] Experiment not found, deleting guild...')
+                    await guild.delete()
+                    console.log(`[INFO ]Trying again in ${config.guild.seconds} seconds...`)
                 }
             })
-        } catch (e) {
-            console.log(e)
+        } catch (err) {
+            console.error('[ERROR]', err)
         }
+    }
+
+    console.log('[INFO] Ready!')
+    await findExperiment()
+
+    const interval = setInterval(async () => {
+        await findExperiment(interval)
     },  config.guild.seconds * 1000)
 })
 
