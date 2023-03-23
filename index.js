@@ -38,7 +38,7 @@ client.on('ready', async () => {
 
             if (client.guilds.cache.size >= 10) {
                 console.log('[INFO] The bot is on too many servers, it has to be on less than 10 to be able to create servers!')
-                if (config.bot.exitGuilds) {
+                if (config.bot.leaveGuilds) {
                     const leaveAmount = client.guilds.cache.size - 8
                     console.log(`[INFO] Leaving ${leaveAmount} guilds...`)
                     client.guilds.cache.forEach(async (guild) => {
@@ -53,10 +53,10 @@ client.on('ready', async () => {
             await client.guilds.create(config.guild.name, {
                 icon: config.guild.icon,
             }).then(async (guild) => {
-                const result = calcMurmurhash3(config.guild.experiment + ":" + guild.id)
-                console.log("[GUILD INFO] Guild ID:", guild.id)
-                console.log("[GUILD INFO] Result:", result)
-                if (result < config.guild.experimentPos) {
+                const result = calcMurmurhash3(config.experiment.id + ":" + guild.id)
+                console.log("[INFO] Guild ID:", guild.id)
+                console.log("[INFO] Result:", result)
+                if (result < config.experiment.position) {
                     console.log('[INFO] Experiment Found!')
                     console.log(guild)
                     guild.channels.cache.first().createInvite({
@@ -69,9 +69,10 @@ client.on('ready', async () => {
                         }
                     })
                 } else {
-                    console.log('[ERROR] Experiment not found, deleting guild...')
+                    console.log('[ERROR] Experiment not found!')
+                    console.log(`[INFO] Deleting guild "${guild.name}"...`)
                     await guild.delete()
-                    console.log(`[INFO] Trying again in ${config.guild.seconds} seconds...`)
+                    console.log(`[INFO] Trying again in ${config.experiment.searchCooldown} seconds...`)
                 }
             })
         } catch (err) {
@@ -84,7 +85,7 @@ client.on('ready', async () => {
 
     const interval = setInterval(async () => {
         await findExperiment(interval)
-    }, config.guild.seconds * 1000)
+    }, config.experiment.searchCooldown * 1000)
 })
 
 client.login(config.bot.token)
