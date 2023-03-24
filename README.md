@@ -54,7 +54,12 @@ npm install
         "searchCooldown": 60 // Cooldown em segundos (Para evitar Rate Limit e Banimentos por Spam na API)
     },
     "bot": {
+        "findCount": 1, // Numero de servidores a serem encontrados
         "leaveGuilds": false, // Se ativado, caso o Bot esteja em mais de 9 servidores (10 ou mais) ele vai sair de todos os servidores até que tenham apenas 8.
+        "guildAllowList": [
+            "1087504601986641941"
+        ], // Array de ID de servidores que o bot deverá manter e não poderá sair/excluir.
+        "searchThroughGuilds": false, // Se ativado, o Bot irá também testar o experiment nos servidores que ele está incluso, até mesmo os que ele não é dono/Adm.
         "token": "TOKEN" // O Token do bot ~~Lembre de manter ele privado a todo custo~~
     }
 }

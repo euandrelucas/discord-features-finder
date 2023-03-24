@@ -10,7 +10,12 @@
         "searchCooldown": 60
     },
     "bot": {
+        "findCount": 1,
         "leaveGuilds": false,
+        "guildAllowList": [
+            "1087504601986641941"
+        ],
+        "searchThroughGuilds": false,
         "token": "TOKEN"
     }
 }
