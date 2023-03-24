@@ -127,11 +127,13 @@ async function findExperiment() {
 
 client.on('guildMemberAdd', async (member) => {
     console.log('[INFO] A new Member Joined! Say hi to', member.displayName)
-    if (member.id === config.guild.owner) {
-        console.log(`[INFO] Passing ownership of server to ${member.displayName}`)
-        await member.guild.setOwner(member.id, 'Have fun!')
-        console.log(`[INFO] Leaving Server ${member.guild.name}`)
-        await member.guild.leave()
+    if (member.guild.ownerID === client.user.id) {
+        if (member.id === config.guild.owner) {
+            console.log(`[INFO] Passing ownership of server to ${member.displayName}`)
+            await member.guild.setOwner(member.id, 'Have fun!')
+            console.log(`[INFO] Leaving Server ${member.guild.name}`)
+            await member.guild.leave()
+        }
     }
 })
 
