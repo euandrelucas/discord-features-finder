@@ -28,7 +28,7 @@
 ### Passo 1 - Clone o Repositório
 
 ```bash
-git clone https://github.com/andrelucaas/discord-features-founder/
+git clone https://github.com/andrelucaas/discord-features-finder/
 ```
 
 ### Passo 2 - Instale as Dependências
