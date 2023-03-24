@@ -11,11 +11,11 @@
     },
     "bot": {
         "findCount": 1,
-        "leaveGuilds": true,
+        "leaveGuilds": false,
         "guildAllowList": [
             "1087504601986641941"
         ],
-        "searchThroughGuilds": true,
+        "searchThroughGuilds": false,
         "token": "TOKEN"
     }
 }
